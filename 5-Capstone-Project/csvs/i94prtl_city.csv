@@ -1,0 +1,661 @@
+value,i94prtl_city
+ALC,Alcan
+ANC,Anchorage
+BAR,Baker Aaf - Baker Island
+DAC,Daltons Cache
+PIZ,Dew Station Pt Lay Dew
+DTH,Dutch Harbor
+EGL,Eagle
+FRB,Fairbanks
+HOM,Homer
+HYD,Hyder
+JUN,Juneau
+5KE,Ketchikan
+KET,Ketchikan
+MOS,Moses Point Intermediate
+NIK,Nikiski
+NOM,Nom
+PKC,Poker Creek
+ORI,Port Lions Spb
+SKA,Skagway
+SNP,St. Paul Island
+TKI,Tokeen
+WRA,Wrangell
+HSV,Madison County - Huntsville
+MOB,Mobile
+LIA,Little Rock
+ROG,Rogers Arpt
+DOU,Douglas
+LUK,Lukeville
+MAP,Mariposa Az           
+NAC,Naco
+NOG,Nogales
+PHO,Phoenix
+POR,Portal
+SLU,San Luis
+SAS,Sasabe
+TUC,Tucson
+YUI,Yuma
+AND,Andrade
+BUR,Burbank
+CAL,Calexico
+CAO,Campo
+FRE,Fresno
+ICP,Imperial County
+LNB,Long Beach
+LOS,Los Angeles
+BFL,Meadows Field - Bakersfield
+OAK,Oakland
+ONT,Ontario
+OTM,Otay Mesa
+BLT,Pacific
+PSP,Palm Springs
+SAC,Sacramento
+SLS,Salinas
+SDP,San Diego
+SFR,San Francisco
+SNJ,San Jose
+SLO,San Luis Obispo
+SLI,San Luis Obispo
+SPC,San Pedro
+SYS,San Ysidro
+SAA,Santa Ana
+STO,Stockton
+TEC,Tecate
+TRV,Travis-afb
+APA,Arapahoe County
+ASE,Aspen
+COS,Colorado Springs
+DEN,Denver
+DRO,La Plata - Durango
+BDL,Bradley International
+BGC,Bridgeport
+GRT,Groton
+HAR,Hartford
+NWH,New Haven
+NWL,New London
+TST,Newington Data Center Test
+WAS,Washington Dc         
+DOV,Dover Afb
+DVD,Dover-afb
+WLL,Wilmington
+BOC,Bocagrande
+SRQ,Bradenton - Sarasota
+CAN,Cape Canaveral
+DAB,Daytona Beach International
+FRN,Fernandina
+FTL,Fort Lauderdale
+FMY,Fort Myers
+FPF,Fort Pierce
+HUR,Hurlburt Field
+GNV,J R Alison Muni - Gainesville
+JAC,Jacksonville
+KEY,Key West
+LEE,Leesburg Municipal Airport
+MLB,Melbourne
+MIA,Miami
+APF,Naples
+OPF,Opa Locka
+ORL,Orlando
+PAN,Panama City
+PEN,Pensacola
+PCF,Port Canaveral
+PEV,Port Everglades
+PSJ,Port St Joe
+SFB,Sanford
+SGJ,St Augustine Arpt
+SAU,St Augustine
+FPR,St Lucie County
+SPE,St Petersburg
+TAM,Tampa
+WPB,West Palm Beach
+ATL,Atlanta
+BRU,Brunswick
+AGS,Bush Field - Augusta
+SAV,Savannah
+AGA,Agana
+HHW,Honolulu
+OGG,Kahului - Maui
+KOA,Keahole-kona
+LIH,Lihue
+CID,Cedar Rapids/iowa City
+DSM,Des Moines
+BOI,Air Term. (gowen Fld) Boise
+EPI,Eastport
+IDA,Fanning Field - Idaho Falls
+PTL,Porthill
+SPI,Capital - Springfield
+CHI,Chicago
+DPA,Dupage County
+PIA,Greater Peoria
+RFD,Greater Rockford
+UGN,Memorial - Waukegan
+GAR,Gary
+HMM,Hammond
+INP,Indianapolis
+MRL,Merrillville
+SBN,South Bend
+ICT,Mid-continent - Witchita
+LEX,Blue Grass - Lexington
+LOU,Louisville
+BTN,Baton Rouge
+LKC,Lake Charles
+LAK,Lake Charles
+MLU,Monroe
+MGC,Morgan City
+NOL,New Orleans
+BOS,Boston
+GLO,Gloucester
+BED,Hanscom Field - Bedford
+LYN,Lynden
+ADW,Andrews Afb
+BAL,Baltimore
+MKG,Muskegon
+PAX,Patuxent River
+BGM,Bangor
+BOO,Boothbay Harbor
+BWM,Bridgewater
+BCK,Buckport
+CLS,Calais
+CRB,Caribou
+COB,Coburn Gore
+EST,Eastcourt
+EPT,Eastport Municipal
+EPM,Eastport
+FOR,Forest City
+FTF,Fort Fairfield
+FTK,Fort Kent
+HML,Hamiin
+HTM,Houlton
+JKM,Jackman
+KAL,Kalispel
+LIM,Limestone
+LUB,Lubec
+MAD,Madawaska
+POM,Portland
+RGM,Rangeley
+SBR,South Brewer
+SRL,St Aurelie
+SPA,St Pampile
+VNB,Van Buren
+VCB,Vanceboro
+AGN,Algonac
+ALP,Alpena
+BCY,Bay City
+DET,Detroit
+GRP,Grand Rapids
+GRO,Grosse Isle
+ISL,Isle Royale
+MRC,Marine City
+MRY,Marysville
+PTK,Oakland County - Pontiac
+PHU,Port Huron
+RBT,Roberts Landing
+SAG,Saginaw
+SSM,Sault Ste. Marie
+SCL,St Clair
+YIP,Willow Run - Ypsilanti
+BAU,Baudette
+CAR,Caribou Municipal Airport
+GTF,Collapsed Into Int
+INL,Collapsed Into Int
+CRA,Crane Lake
+MIC,Crystal Municipal Airport
+DUL,Duluth
+ELY,Ely
+GPM,Grand Portage
+SVC,Grant County - Silver City
+INT,'Int''l Falls'
+LAN,Lancaster
+MSP,Minn./st Paul
+LIN,Northern Svc Center
+NOY,Noyes
+PIN,Pine Creek
+48Y,Pinecreek Border Arpt
+RAN,Rainer
+RST,Rochester
+ROS,Roseau
+SPM,St Paul
+WSB,Warroad Intl
+WAR,Warroad
+KAN,Kansas City
+SGF,Springfield-branson
+STL,St Louis
+WHI,Whitetail
+WHM,Wild Horse
+GPT,Biloxi Regional
+GTR,Golden Triangle Lowndes Cnty
+GUL,Gulfport
+PAS,Pascagoula
+JAN,Thompson Field - Jackson
+BIL,Billings
+BTM,Butte
+CHF,Chief Mt
+CTB,Cut Bank Municipal
+CUT,Cut Bank
+DLB,Del Bonita
+EUR,Eureka
+BZN,Gallatin Field - Bozeman
+FCA,Glacier National Park
+GGW,Glasgow
+GRE,Great Falls
+HVR,Havre
+HEL,Helena
+LWT,Lewiston
+MGM,Morgan
+OPH,Opheim
+PIE,Piegan
+RAY,Raymond
+ROO,Roosville
+SCO,Scobey
+SWE,Sweetgtass
+TRL,Trial Creek
+TUR,Turner
+WCM,Willow Creek
+CLT,Charlotte
+FAY,Fayetteville
+MRH,Morehead City
+FOP,Morris Fields Aaf
+GSO,Piedmont Triad Intl Airport
+RDU,Raleigh/durham
+SSC,Shaw Afb - Sumter
+WIL,Wilmington
+AMB,Ambrose
+ANT,Antler
+CRY,Carbury
+DNS,Dunseith
+FAR,Fargo
+FRT,Fortuna
+GRF,Grand Forks
+HNN,Hannah
+HNS,Hansboro
+MAI,Maida
+MND,Minot
+NEC,Neche
+NOO,Noonan
+NRG,Northgate
+PEM,Pembina
+SAR,Sarles
+SHR,Sherwood
+SJO,St John
+WAL,Walhalla
+WHO,Westhope
+WND,Williston
+OMA,Omaha
+LEB,Lebanon
+MHT,Manchester
+PNH,Pittsburg
+PSM,Portsmouth
+BYO,Bayonne
+CNJ,Camden
+HOB,Hoboken
+JER,Jersey City
+WRI,Mc Guire Afb - Wrightsown
+MMU,Morristown
+NEW,Newark/teterboro
+PER,Perth Amboy
+ACY,Pomona Field - Atlantic City
+ALA,Alamagordo
+ABQ,Albuquerque
+ANP,Antelope Wells
+CRL,Carlsbad
+COL,Columbus
+CDD,Crane Lake - St. Louis Cnty
+DNM,Deming
+LAS,Las Cruces
+LOB,Lordsburg
+RUI,Ruidoso
+STR,Santa Teresa
+RNO,Cannon Intl - Reno/tahoe
+FLX,Fallon Municipal Airport
+LVG,Las Vegas
+REN,Reno
+ALB,Albany
+AXB,Alexandria Bay
+BUF,Buffalo
+CNH,Cannon Corners
+CAP,Cape Vincent
+CHM,Champlain
+CHT,Chateaugay
+CLA,Clayton
+FTC,Fort Covington
+LAG,La Guardia
+LEW,Lewiston
+MAS,Massena
+MAG,Mcguire Afb
+MOO,Moores
+MRR,Morristown
+NYC,New York
+NIA,Niagara Falls
+OGD,Ogdensburg
+OSW,Oswego
+ELM,Regional Arpt - Horsehead
+ROC,Rochester
+ROU,Rouses Point
+SWF,Stewart - Orange Cnty
+SYR,Syracuse
+THO,Thousand Island Bridge
+TRO,Trout River
+WAT,Watertown
+HPN,Westchester - White Plains
+WRB,Whirlpool Bridge
+YOU,Youngstown
+AKR,Akron
+ATB,Ashtabula
+CIN,Cincinnati
+CLE,Cleveland
+CLM,Columbus
+LOR,Lorain
+MBO,Marble Heads
+SDY,Sandusky
+TOL,Toledo
+OKC,Oklahoma City
+TUL,Tulsa
+AST,Astoria
+COO,Coos Bay
+HIO,Hillsboro
+MED,Medford
+NPT,Newport
+POO,Portland
+PUT,Put-in-bay
+RDM,Roberts Fields - Redmond
+ERI,Erie
+MDT,Harrisburg
+HSB,Harrisonburg
+PHI,Philadelphia
+PIT,Pittsburg
+AGU,Aguadilla
+BQN,Borinquen - Aguadillo
+JCP,Culebra - Benjamin Rivera
+ENS,Ensenada
+FAJ,Fajardo
+HUM,Humacao
+JOB,Jobos
+MAY,Mayaguez
+PON,Ponce
+PSE,Ponce-mercedita
+SAJ,San Juan
+VQS,Vieques-arpt
+PRO,Providence
+PVD,Theodore Francis - Warwick
+CHL,Charleston
+CAE,Columbia
+GEO,Georgetown
+GSP,Greenville
+GRR,Greer
+MYR,Myrtle Beach
+SPF,Black Hills
+HON,Howes Regional Arpt - Huron
+SAI,Saipan
+TYS,Mc Ghee Tyson - Alcoa
+MEM,Memphis
+NSV,Nashville
+TRI,Tri City Arpt
+ADS,Addison Airport- Addison
+ADT,Amistad Dam
+ANZ,Anzalduas
+AUS,Austin
+BEA,Beaumont
+BBP,Big Bend Park
+SCC,Bp Spec Coord. Ctr
+BTC,Bp Tactical Unit
+BOA,Bridge Of Americas
+BRO,Brownsville
+CRP,Corpus Christi
+DAL,Dallas
+DLR,Del Rio
+DNA,Donna
+EGP,Eagle Pass
+ELP,El Paso
+FAB,Fabens
+FAL,Falcon Heights
+FTH,Fort Hancock
+AFW,Fort Worth Alliance
+FPT,Freeport
+GAL,Galveston
+HLG,Harlingen
+HID,Hidalgo
+HOU,Houston
+SGR,Hull Field
+LLB,Juarez-lincoln Bridge
+LCB,Laredo Columbia Bridge
+LRN,Laredo North
+LAR,Laredo
+LSE,Los Ebanos
+IND,Los Indios
+LOI,Los Indios
+MRS,Marfa
+MCA,Mcallen
+MAF,Odessa Regional
+PDN,'Paso Del Norte,tx     '
+PBB,Peace Bridge
+PHR,Pharr
+PAR,Port Arthur
+ISB,Port Isabel
+POE,Port Of El Paso
+PRE,Presidio
+PGR,Progreso
+RIO,Rio Grande City
+ROM,Roma
+SNA,San Antonio
+SNN,Sanderson
+VIB,Veteran Intl Bridge
+YSL,Ysleta
+CHA,Charlotte Amalie
+CHR,Christiansted
+CRU,Cruz Bay
+FRK,Frederiksted
+STT,St Thomas
+LGU,Cache Airport - Logan
+SLC,Salt Lake City
+CHO,Albemarle Charlottesville
+DAA,Davison Aaf - Fairfax Cnty
+HOP,Hopewell
+HEF,Manassas
+NWN,Newport
+NOR,Norfolk
+RCM,Richmond
+ABS,Alburg Springs
+ABG,Alburg
+BEB,Beebe Plain
+BEE,Beecher Falls
+BRG,Burlington
+CNA,Canaan
+DER,Derby Line
+DLV,Derby Line
+ERC,East Richford
+HIG,Highgate Springs
+MOR,Morses Line
+NPV,Newport
+NRT,North Troy
+NRN,Norton
+PIV,Pinnacle Road
+RIF,Richfort
+STA,St Albans
+SWB,Swanton
+WBE,West Berkshire
+ABE,Aberdeen
+ANA,Anacortes
+BEL,Bellingham
+BLI,Bellingham
+BLA,Blaine
+BWA,Boundary
+CUR,Curlew
+DVL,Danville
+EVE,Everett
+FER,Ferry
+FRI,Friday Harbor
+FWA,Frontier
+KLM,Kalama
+LAU,Laurier
+LON,Longview
+MET,Metaline Falls
+MWH,Moses Lake Grant County Arpt
+NEA,Neah Bay
+NIG,Nighthawk
+OLY,Olympia
+ORO,Oroville
+PWB,Pasco
+PIR,Point Roberts
+PNG,Port Angeles
+PTO,Port Townsend
+SEA,Seattle
+SPO,Spokane
+SUM,Sumas
+TAC,Tacoma
+PSC,Tri-cities - Pasco
+VAN,Vancouver
+AGM,Algoma
+BAY,Bayfield
+GRB,Green Bay
+MNW,Manitowoc
+MIL,Milwaukee
+MSN,Truax Field - Dane County
+CHS,Charleston
+CLK,Clarksburg
+BLF,Mercer County
+CSP,Casper
+XXX,Not Reported/unknown   
+888,Unidentifed Air / Seaport
+UNK,Unknown Poe           
+CLG,Calgary
+EDA,Edmonton
+YHC,Hakai Pass
+HAL,Halifax
+MON,Montreal
+OTT,Ottawa
+YXE,Saskatoon
+TOR,Toronto
+VCV,Vancouver
+VIC,Victoria
+WIN,Winnipeg
+AMS,Amsterdam-schiphol
+ARB,Aruba
+BAN,Bankok
+BEI,Beica #arpt
+PEK,Beijing Capital Intl
+BDA,Kindley Field
+BOG,Bogota
+EZE,Buenos Aires
+CUN,Cancun
+CRQ,Caravelas
+MVD,Carrasco
+DUB,Dublin
+FOU,Fougamou #arpt
+FBA,Freeport
+MTY,Gen M. Escobedo
+HMO,Gen Pesqueira Garcia
+GCM,Grand Cayman
+GDL,Guadalajara
+HAM,Hamilton
+ICN,Inchon
+IWA,Invalid - Iwakuni
+CND,Kogalniceanu
+LAH,Labuha Arpt
+DUR,Louis Botha
+MAL,Mangole Arpt
+MDE,Medellin
+MEX,Juarez Intl
+LHR,Middlesex
+NBO,Nairobi
+NAS,Nassau
+NCA,North Caicos
+PTY,Omar Torrijos
+SPV,Papua
+UIO,Quito (mariscal Sucr)
+RIT,Rome
+SNO,Sakon Nakhon #arpt
+SLP,San Luis Potosi #arpt
+SAN,San Salvador
+SRO,Santana Ramos #arpt
+GRU,Guarulhos Intl
+SHA,Shannon
+HIL,Shillavo
+TOK,Torokina #arpt
+VER,Veracruz
+LGW,West Sussex
+ZZZ,Mexico Land (banco De Mexico) 
+CHN,No Port Code (chn)
+CNC,Cannon Corners
+MAA,Abu Dhabi
+AG0,Magnolia
+BHM,Bar Harbor
+BHX,Birmingham
+CAK,Akron
+FOK,Suffolk County
+LND,Lander
+MAR,Marfa
+MLI,Moline
+RIV,Riverside
+RME,Rome
+VNY,Van Nuys
+YUM,Yuma
+FRG,Collapsed (fok) 06/15
+HRL,Collapsed (hlg) 06/15
+ISP,Collapsed (fok) 06/15
+JSJ,Collapsed (saj) 06/15
+BUS,Collapsed (buf) 06/15
+IAG,Collapsed (nia) 06/15
+PHN,Collapsed (phu) 06/15
+STN,Collapsed (str) 06/15
+VMB,Collapsed (vnb) 06/15
+T01,Collapsed (sea) 06/15
+PHF,No Port Code (phf)
+DRV,No Port Code (drv)
+FTB,No Port Code (ftb)
+GAC,No Port Code (gac)
+GMT,No Port Code (gmt)
+JFA,No Port Code (jfa)
+JMZ,No Port Code (jmz)
+NC8,No Port Code (nc8)
+NYL,No Port Code (nyl)
+OAI,No Port Code (oai)
+PCW,No Port Code (pcw)
+WA5,No Port Code (was)
+WTR,No Port Code (wtr)
+X96,No Port Code (x96)
+XNA,No Port Code (xna)
+YGF,No Port Code (ygf)
+5T6,No Port Code (5t6)
+060,No Port Code (60)
+SP0,No Port Code (sp0)
+W55,No Port Code (w55)
+X44,No Port Code (x44)
+AUH,No Port Code (auh)
+RYY,No Port Code (ryy)
+SUS,No Port Code (sus)
+74S,No Port Code (74s)
+ATW,No Port Code (atw)
+CPX,No Port Code (cpx)
+MTH,No Port Code (mth)
+PFN,No Port Code (pfn)
+SCH,No Port Code (sch)
+ASI,No Port Code (asi)
+BKF,No Port Code (bkf)
+DAY,No Port Code (day)
+Y62,No Port Code (y62)
+AG	,No Port Code (ag)
+BCM,No Port Code (bcm)
+DEC,No Port Code (dec)
+PLB,No Port Code (plb)
+CXO,No Port Code (cxo)
+JBQ,No Port Code (jbq)
+JIG,No Port Code (jig)
+OGS,No Port Code (ogs)
+TIW,No Port Code (tiw)
+OTS,No Port Code (ots)
+AMT,No Port Code (amt)
+EGE,No Port Code (ege)
+GPI,No Port Code (gpi)
+NGL,No Port Code (ngl)
+OLM,No Port Code (olm)
+.GA,No Port Code (.ga)
+CLX,No Port Code (clx)
+CP ,No Port Code (cp)
+FSC,No Port Code (fsc)
+NK ,No Port Code (nk)
+ADU ,No Port Code (adu)
+AKT ,No Port Code (akt)
+LIT ,No Port Code (lit)
+A2A ,No Port Code (a2a)
+OSN ,No Port Code (osn)
