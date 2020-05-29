@@ -97,3 +97,55 @@ def create_demographic_table(df, demographics, outputfolder):
     # reformat column names
     df_demo = rename_columns(df_demo)
     df_demo.write.parquet(os.path.join(outputfolder, 'city_demographics.parquet'), 'overwrite')
+
+
+def spark_read_csv(folder, filename, **kwargs):
+
+    return spark.read.format('csv').options(header='true', inferSchema=True, **kwargs).\
+        load(os.path.join(folder, filename))
+
+def create_country_table(datafolder, outputfolder):
+    cntyl = read_csv(datafolder, 'i94cntyl.csv', sep=',', quotechar="'")
+    cntyl.write.parquet(os.path.join(outputfolder, 'country.parquet'), 'overwrite')
+    return cntyl
+
+def create_full_time_table(outputfolder):
+    """
+    This creates a full time table until the year 2060. This should reduce the processing
+    time a bit, since the dates don't have to processed each time new facts are added
+    """
+    days_till_2060 = range(int(100 * 365.25))
+    all_dates = [(t,) for t in days_till_2060]
+
+    t_schema = T.StructType([T.StructField('i94_date', T.IntegerType())])
+    timeframe = spark.createDataFrame(all_dates, t_schema)
+    timeframe = timeframe.withColumn("dt_date", F.expr("date_add(to_date('1960-01-01'), i94_date)"))
+    timeframe = timeframe.select('i94_date', 'dt_date',
+                    F.year('dt_date').alias('year'),
+                    F.month('dt_date').alias('month'),
+                    F.dayofmonth('dt_date').alias('day'),
+                    F.dayofweek('dt_date').alias('weekday'))
+
+    timeframe.write.partitionBy('year', 'month').parquet(os.path.join(outputfolder, 'dates.parquet'), 'overwrite')
+    return timeframe
+
+
+def generate_climate_country(folder, filename, outputfolder):
+    climate = spark_read_csv(folder, filename, sep=',')
+    climate = climate.withColumn('dt', F.to_date(F.col('dt')))
+    country = spark.read.option("mergeSchema", "true").parquet(os.path.join(outputfolder, 'country.parquet'))
+    climate = climate.join(country, on=country['i94cntyl'] == climate['Country'], how='leftouter')
+    climate = climate.drop('i94cntyl')
+    climate = rename_columns(climate)
+    climate = climate.withColumn('year', F.year('dt').alias('year'))
+    climate = climate.withColumnRenamed('id', 'country_id').\
+        withColumnRenamed('averagetemperatureuncertainty', 'avg_uncertainty').\
+        withColumnRenamed('averagetemperature', 'avg_temperature')
+    climate.write.partitionBy('year', 'country').parquet(os.path.join(outputfolder, 'climate_country.parquet'), 'overwrite')
+    return climate
+
+def create_annual_temp_table(outputfolder):
+    annual = spark.read.option("mergeSchema", "true").parquet(os.path.join(OUTPUTFOLDER, 'climate_country.parquet'))
+    annual.groupby([F.col('country'), F.col('country_id'), F.col('year')]).agg(F.avg('avg_temperature').alias('avg_temperature'))
+    annual.write.partitionBy('country').parquet(os.path.join(outputfolder, 'annual_climate_country.parquet'), 'overwrite')
+    return annual
