@@ -1,5 +1,5 @@
-value,i94cntyl
-582,'Mexico Air Sea, And Not Reported (i-94, No Land Arrivals)'
+cntyl_id,cntyl
+582,"Mexico Air Sea, And Not Reported (i-94, No Land Arrivals)"
 236,Afghanistan
 101,Albania
 316,Algeria
@@ -24,7 +24,7 @@ value,i94cntyl
 153,Belarus
 242,Bhutan
 688,Bolivia
-717,'Bonaire, St Eustatius, Saba '
+717,"Bonaire, St Eustatius, Saba "
 164,Bosnia-herzegovina
 336,Botswana
 689,Brazil
@@ -40,7 +40,7 @@ value,i94cntyl
 383,Central African Republic
 384,Chad
 690,Chile
-245,'China, Prc'
+245,"China, Prc"
 721,Curacao 
 270,Christmas Island
 271,Cocos Islands
@@ -135,7 +135,7 @@ value,i94cntyl
 389,Mauritania
 342,Mauritius
 760,Mayotte (africa - French) 
-473,'Micronesia, Fed. States Of'
+473,"Micronesia, Fed. States Of"
 157,Moldova
 122,Monaco
 299,Mongolia
@@ -248,7 +248,7 @@ value,i94cntyl
 404,Invalid: Guam
 730,Invalid: International Waters 
 731,Invalid: Johnson Island 
-471,'Invalid: Mariana Islands, Northern'
+471,"Invalid: Mariana Islands, Northern"
 737,Invalid: Midway Islands 
 753,Invalid: Minor Outlying Islands - Usa
 740,Invalid: Neutral Zone (s. Arabia/iraq) 
