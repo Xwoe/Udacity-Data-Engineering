@@ -53,11 +53,24 @@ def convert_datatypes(df_spark):
             withColumn('admnum', df_spark['admnum'].cast(T.IntegerType()))
 
 
+
+def add_duration_column(df_fact):
+
+    df_fact = df_fact.withColumn("arrival_dt", F.expr("date_add(to_date('1960-01-01'), arrdate)"))
+    df_fact = df_fact.withColumn("depart_dt", F.expr("date_add(to_date('1960-01-01'), depdate)"))
+    df_fact.withColumn("length_stay", F.datediff("depart_date", "arrival_date"))
+    #TODO remove columns arrival...
+    return df_fact
+
+def remove_colums(df_fact);
+
+    keep_columns = ['cicid', 'i94yr', 'i94mon', 'arrival_dt', 'arrdate', 'depdate', 'i94cit', 'i94res', 'i94port', 'i94mode', 'i94addr', 'i94bir',
+                'i94visa', 'visatype', 'biryear', 'gender', 'airline', 'fltno', 'length_stay']
+
 def create_fact_table(spark, input_folder, output_folder):
 
-    df_spark = spark.read.option("mergeSchema", "true").parquet(os.path.join(DATAFOLDER, 'sas_data'))
-    df_fact = df_test.withColumn("arrival_dt", F.expr("date_add(to_date('1960-01-01'), arrdate)"))
-    df_fact = df_fact.withColumn("depart_dt", F.expr("date_add(to_date('1960-01-01'), depdate)"))
+    df_fact = spark.read.option("mergeSchema", "true").parquet(os.path.join(input_folder, 'sas_data'))
+
 
 
 
