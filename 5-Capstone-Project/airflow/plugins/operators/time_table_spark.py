@@ -14,20 +14,19 @@ class TimeSparkOperator(BaseOperator):
     @apply_defaults
     def __init__(self,
                  redshift_conn_id='',
-                 #s3_bucket='',
-                 #s3_key='',
+                 s3_bucket='',
+                 s3_key='',
                  table='dt_time',
                  aws_credentials_id='',
-                 region='us-west-2',
-                 
+                 region='us-east-2',
+                 write_mode='overwrite',
                  *args, **kwargs):
 
         super(TimeSparkOperator, self).__init__(*args, **kwargs)
 
         self.table = table
-        self.redshift_conn_id = redshift_conn_id
-        #self.s3_bucket = s3_bucket
-        #self.s3_key = s3_key
+        self.s3_bucket = s3_bucket
+        self.s3_key = s3_key
         self.aws_credentials_id = aws_credentials_id
         self.region = region
 
@@ -36,26 +35,17 @@ class TimeSparkOperator(BaseOperator):
 
         aws_hook = AwsHook(self.aws_credentials_id)
         credentials = aws_hook.get_credentials()
-        redshift = PostgresHook(postgres_conn_id=self.redshift_conn_id)
-
-        self.log.info("Clearing data from destination Redshift table")
-        redshift.run("DELETE FROM {}".format(self.table))
-        redshift_con_string = "jdbc:redshift://{}:{}/{}".format(
-            redshift.host, redshift.port, redshift.schema    
-            )
+        
+        outputfolder = 's3://{}/{}'.format(s3_bucket, s3_key)
+        
+        df = create_full_time_table()
+        df.write\
+          .partitionBy('year', 'month')\
+          .mode('overwrite')\
+          .parquet(os.path.join(outputfolder, 'dates.parquet'))
         
         
-        movies_df.write \
-             .format("jdbc")  \
-             .option("url", redshift_con_string) \
-             .option("dbtable", "public.dt_time") \
-             .option("user", redshift.user) \
-             .option("password", redshift.password) \
-             .option("driver", "com.amazon.redshift.jdbc42.Driver") \
-             .mode("append") \
-             .save()
-        
-    def create_full_time_table(outputfolder, daysafter=36525):
+    def create_full_time_table(daysafter=36525):
 
         future_days = range(daysafter)
         all_dates = [(t,) for t in future_days]
@@ -69,8 +59,9 @@ class TimeSparkOperator(BaseOperator):
                         F.dayofmonth('dt_date').alias('day'),
                         F.dayofweek('dt_date').alias('weekday'))
 
-        #timeframe.write.partitionBy('year', 'month').parquet(os.path.join(outputfolder, 'dates.parquet'), 'overwrite')
+     
         return timeframe
+    
     
     def get_spark_sesssion():
         

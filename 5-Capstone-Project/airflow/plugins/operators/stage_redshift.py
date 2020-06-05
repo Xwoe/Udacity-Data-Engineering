@@ -20,9 +20,7 @@ class StageToRedshiftOperator(BaseOperator):
     copy_sql = """
         COPY {table} 
         FROM '{s3_path}' 
-        ACCESS_KEY_ID '{aws_key_id}'
-        SECRET_ACCESS_KEY '{aws_secret}'
-        REGION '{region}'
+        IAM_ROLE '{iam}'
         {file_format};
         """
     
@@ -32,9 +30,10 @@ class StageToRedshiftOperator(BaseOperator):
                  redshift_conn_id='',
                  s3_bucket='',
                  s3_key='',
+                 aws_iam='',
                  aws_credentials_id='',
                  region='us-west-2',
-                 file_format='JSON',
+                 file_format='FORMAT AS PARQUET',
                  *args, **kwargs):
 
         super(StageToRedshiftOperator, self).__init__(*args, **kwargs)
@@ -43,6 +42,7 @@ class StageToRedshiftOperator(BaseOperator):
         self.redshift_conn_id = redshift_conn_id
         self.s3_bucket = s3_bucket
         self.s3_key = s3_key
+        self.aws_iam = aws_iam
         self.aws_credentials_id=aws_credentials_id
         self.region = region
         self.file_format = file_format
@@ -63,8 +63,7 @@ class StageToRedshiftOperator(BaseOperator):
         formatted_sql = StageToRedshiftOperator.copy_sql.format(
             table=self.table,
             s3_path=s3_path,
-            aws_key_id=credentials.access_key,
-            aws_secret=credentials.secret_key,
+            iam=self.aws_iam,
             region=self.region,
             file_format=self.file_format   
         )

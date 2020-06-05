@@ -1,10 +1,11 @@
 from datetime import datetime, timedelta
 import os
 from airflow import DAG
+from airflow.models import Variable
 from airflow.operators.dummy_operator import DummyOperator
 from airflow.operators import (StageToRedshiftOperator, LoadFactOperator,
                                 LoadDimensionOperator, DataQualityOperator,
-                                PostgresOperator, TimeSparkOperator)
+                                PostgresOperator)
 from helpers import SqlQueries
 
 
@@ -45,27 +46,19 @@ drop_sql_tables = PostgresOperator(
 stage_model_to_redshift = StageToRedshiftOperator(
     task_id='Stage_Model',
     dag=dag,
-    table='public.transport_mode',
+    table='public.transport',
     redshift_conn_id='redshift',
-    s3_bucket='xwoe-bucket-demo',
-    s3_key='deng_capstone/csv/i94model.csv',
+    s3_bucket='xwoe-udacity',
+    s3_key='deng_capstone/tables/transport.parquet',
     aws_credentials_id='aws_credentials',
-    region='us-west-2',
-    file_format="FORMAT AS CSV DELIMITER ',' QUOTE '\''"
+    aws_iam=Variable.get('arn', default_var='arn:aws:iam::500028201692:role/myRedshiftRole'),
+    #region='us-east-2',
+    file_format="FORMAT AS PARQUET"
+    #file_format="""FORMAT AS CSV DELIMITER ',' QUOTE '"' 
+    #               IGNOREHEADER 1"""
     
 )
 
-time_spark =  TimeSparkOperator(
-    task_id='Time_Spark',
-    dag=dag,
-    table='public.dt_time',
-    redshift_conn_id='redshift',
-                 #s3_bucket='',
-                 #s3_key='',
-            
-    aws_credentials_id='aws_credentials',
-    region='us-west-2'
-)
 
 """
 load_songplays_table = LoadFactOperator(
@@ -93,9 +86,9 @@ end_operator = DummyOperator(task_id='Stop_Execution',  dag=dag)
 
 start_operator >> drop_sql_tables
 drop_sql_tables >> create_sql_tables
-create_sql_tables >> time_spark
+#create_sql_tables >> time_spark
 
 create_sql_tables >> stage_model_to_redshift
 
-time_spark >> end_operator
+#time_spark >> end_operator
 stage_model_to_redshift >> end_operator

@@ -56,6 +56,7 @@ def format_column_names(s):
     s = s.casefold()
     s = s.replace(' ', '_')
     s = s.replace('-', '_')
+    s = s.replace('i94', 'i_')
     return s
 
 def rename_columns(df):
