@@ -3,7 +3,7 @@ import os
 from airflow import DAG
 from airflow.models import Variable
 from airflow.operators.dummy_operator import DummyOperator
-from airflow.operators import (StageToRedshiftOperator, 
+from airflow.operators import (StageToRedshiftOperator,
                                 DataQualityOperator,
                                 PostgresOperator)
 from helpers import SqlQueries
@@ -34,7 +34,6 @@ create_sql_tables = PostgresOperator(
     postgres_conn_id='redshift',
 )
 
-# TODO for debug purposes
 drop_sql_tables = PostgresOperator(
     task_id='Drop_Tables',
     dag=dag,
@@ -53,7 +52,6 @@ transport_to_redshift = StageToRedshiftOperator(
     aws_credentials_id='aws_credentials',
     aws_iam=Variable.get('arn'),
     file_format="FORMAT AS PARQUET"
-    
 )
 
 country_to_redshift = StageToRedshiftOperator(
@@ -67,7 +65,6 @@ country_to_redshift = StageToRedshiftOperator(
     aws_iam=Variable.get('arn'),
     file_format="FORMAT AS PARQUET"
 )
-
 
 temperature_annual_country_to_redshift = StageToRedshiftOperator(
     task_id='Temperature_Annual_Country_to_Redshift',
@@ -134,7 +131,7 @@ quality_transport = DataQualityOperator(
     dag=dag,
     redshift_conn_id='redshift',
     sql_query='SELECT COUNT(*) FROM public.transport',
-    check_not_empty=True    
+    check_not_empty=True
 )
 
 quality_dates = DataQualityOperator(
@@ -142,7 +139,7 @@ quality_dates = DataQualityOperator(
     dag=dag,
     redshift_conn_id='redshift',
     sql_query='SELECT COUNT(*) FROM public.dates',
-    check_not_empty=True    
+    check_not_empty=True
 )
 
 quality_country = DataQualityOperator(
@@ -150,7 +147,7 @@ quality_country = DataQualityOperator(
     dag=dag,
     redshift_conn_id='redshift',
     sql_query='SELECT COUNT(*) FROM public.country',
-    check_not_empty=True    
+    check_not_empty=True
 )
 
 quality_temperature_annual_country = DataQualityOperator(
@@ -158,7 +155,7 @@ quality_temperature_annual_country = DataQualityOperator(
     dag=dag,
     redshift_conn_id='redshift',
     sql_query='SELECT COUNT(*) FROM public.temperature_annual_country',
-    check_not_empty=True    
+    check_not_empty=True
 )
 
 quality_city_demographics = DataQualityOperator(
@@ -166,7 +163,7 @@ quality_city_demographics = DataQualityOperator(
     dag=dag,
     redshift_conn_id='redshift',
     sql_query='SELECT COUNT(*) FROM public.city_demographics',
-    check_not_empty=True    
+    check_not_empty=True
 )
 
 quality_visa = DataQualityOperator(
@@ -193,7 +190,7 @@ start_operator >> drop_sql_tables
 drop_sql_tables >> create_sql_tables
 
 create_sql_tables >> [transport_to_redshift,
-                      country_to_redshift, 
+                      country_to_redshift,
                       temperature_annual_country_to_redshift,
                       temperature_global_to_redshift,
                       visa_to_redshift,
