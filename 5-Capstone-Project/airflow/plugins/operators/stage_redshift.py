@@ -34,6 +34,7 @@ class StageToRedshiftOperator(BaseOperator):
                  aws_credentials_id='',
                  region='us-west-2',
                  file_format='FORMAT AS PARQUET',
+                 flush_first=True,
                  *args, **kwargs):
 
         super(StageToRedshiftOperator, self).__init__(*args, **kwargs)
@@ -46,6 +47,7 @@ class StageToRedshiftOperator(BaseOperator):
         self.aws_credentials_id=aws_credentials_id
         self.region = region
         self.file_format = file_format
+        self.flush_first = flush_first
 
     def execute(self, context):
         self.log.info('StageToRedshiftOperator initializing...')
@@ -53,9 +55,10 @@ class StageToRedshiftOperator(BaseOperator):
         aws_hook = AwsHook(self.aws_credentials_id)
         credentials = aws_hook.get_credentials()
         redshift = PostgresHook(postgres_conn_id=self.redshift_conn_id)
-
-        self.log.info("Clearing data from destination Redshift table")
-        redshift.run("DELETE FROM {}".format(self.table))
+        
+        if self.flush_first:
+            self.log.info("Clearing data from destination Redshift table")
+            redshift.run("DELETE FROM {}".format(self.table))
         
         self.log.info("Copying data from S3 to Redshift")
         rendered_key = self.s3_key.format(**context)

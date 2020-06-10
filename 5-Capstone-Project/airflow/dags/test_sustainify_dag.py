@@ -3,8 +3,7 @@ import os
 from airflow import DAG
 from airflow.models import Variable
 from airflow.operators.dummy_operator import DummyOperator
-from airflow.operators import (StageToRedshiftOperator, LoadFactOperator,
-                                LoadDimensionOperator, DataQualityOperator,
+from airflow.operators import (StageToRedshiftOperator, DataQualityOperator,
                                 PostgresOperator)
 from helpers import SqlQueries
 
@@ -19,7 +18,7 @@ default_args = {
     'email_on_retry': False
 }
 
-dag = DAG('sustainify_dag',
+dag = DAG('test_sustainify_dag',
           default_args=default_args,
           description='Load and transform data in Redshift with Airflow',
           schedule_interval='@daily'
@@ -43,52 +42,25 @@ drop_sql_tables = PostgresOperator(
 )
 
 
-stage_model_to_redshift = StageToRedshiftOperator(
-    task_id='Stage_Model',
+temp_ann_to_redshift = StageToRedshiftOperator(
+    task_id='temperature_annual_country',
     dag=dag,
-    table='public.transport',
+    table='public.temperature_annual_country',
     redshift_conn_id='redshift',
     s3_bucket='xwoe-udacity',
-    s3_key='deng_capstone/tables/transport.parquet',
+    s3_key='deng_capstone/tables/temperature_annual_country.parquet',
     aws_credentials_id='aws_credentials',
-    aws_iam=Variable.get('arn', default_var='arn:aws:iam::500028201692:role/myRedshiftRole'),
-    #region='us-east-2',
+    aws_iam=Variable.get('arn'),
     file_format="FORMAT AS PARQUET"
-    #file_format="""FORMAT AS CSV DELIMITER ',' QUOTE '"' 
-    #               IGNOREHEADER 1"""
-    
 )
 
 
-"""
-load_songplays_table = LoadFactOperator(
-    task_id='Load_songplays_fact_table',
-    dag=dag,
-    redshift_conn_id='redshift',
-    select_sql=SqlQueries.songplay_table_insert,
-    table='public.songplays'
-)
-"""
-
-"""
-run_quality_checks = DataQualityOperator(
-    task_id='Run_data_quality_checks',
-    dag=dag,
-    redshift_conn_id='redshift',
-    sql_query='SELECT COUNT(*) FROM public.users WHERE userid = NULL',
-    expected_result=0
-    
-)
-"""
 
 end_operator = DummyOperator(task_id='Stop_Execution',  dag=dag)
 
 
 start_operator >> drop_sql_tables
 drop_sql_tables >> create_sql_tables
-#create_sql_tables >> time_spark
 
-create_sql_tables >> stage_model_to_redshift
-
-#time_spark >> end_operator
-stage_model_to_redshift >> end_operator
+create_sql_tables >> temp_ann_to_redshift
+temp_ann_to_redshift >> end_operator

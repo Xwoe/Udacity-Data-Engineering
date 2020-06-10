@@ -4,6 +4,7 @@ from pyspark.sql.functions import udf
 import pyspark.sql.functions as F
 import pyspark.sql.types as T
 import os
+import re
 
 def process_time(df_time):
     df_time = df_time.withColumn("arrival_date", F.expr("date_add(to_date('1960-01-01'), arrdate)"))
@@ -52,11 +53,19 @@ def udf_city_name(city_full):
     """
     return str.split(city_full, ',')[0].capitalize()
 
+def camel_to_snake(s):
+    """
+    Transforms CamelCase notation to snake_case notation.
+    """
+    return re.sub(r'(?<!^)(?=[A-Z])', '_', s).lower()
+
+
 def format_column_names(s):
-    s = s.casefold()
-    s = s.replace(' ', '_')
-    s = s.replace('-', '_')
+    #s = s.casefold()
+    s = s.replace(' ', '')
+    s = s.replace('-', '')
     s = s.replace('i94', 'i_')
+    s = camel_to_snake(s)
     return s
 
 def rename_columns(df):
@@ -64,6 +73,14 @@ def rename_columns(df):
     new_names = [format_column_names(s) for s in old_names]
     df = reduce(lambda df, idx:
                 df.withColumnRenamed(old_names[idx], new_names[idx]), range(len(old_names)), df)
+    return df
+
+def round_columns(df, columns, num_decimals):
+    """
+    Round columns to the specified number of decimal places.
+    """
+    for col in columns:
+        df = df.withColumn(col, F.round(df[col], num_decimals))
     return df
 
 

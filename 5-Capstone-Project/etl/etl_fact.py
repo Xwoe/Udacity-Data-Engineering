@@ -78,6 +78,7 @@ def convert_datatypes(df_spark):
             withColumn('i94visa', df_spark['i94visa'].cast(T.IntegerType())).\
             withColumn('count', df_spark['count'].cast(T.IntegerType())).\
             withColumn('biryear', df_spark['biryear'].cast(T.IntegerType())).\
+            withColumn('cicid', df_spark['cicid'].cast(T.IntegerType())).\
             withColumn('admnum', df_spark['admnum'].cast(T.IntegerType()))
 
 
@@ -91,32 +92,27 @@ def add_duration_column(df):
 
 def remove_colums(df):
     logger.info('removing unused columns')
-    keep_columns = ['i_yr', 'i_mon', 'arrdate', 'depdate', 'i_cit', 'i_res', 'i_port',
+    keep_columns = ['cicid', 'i_yr', 'i_mon', 'arrdate', 'depdate', 'i_cit', 'i_res', 'i_port',
                     'i_mode', 'i_addr', 'i_bir', 'i_visa', 'visatype',
-                    'gender', 'airline', 'fltno', 'length_stay'] #'biryear', 'cicid'
+                    'gender', 'airline', 'fltno', 'length_stay']
     return df.select(keep_columns)
 
 
 # TODO switch back to 'append' in the end
 def write_immigration(spark, df, output_folder):
     logger.info('writing immigration.parquet')
-    df.write.partitionBy('i_yr', 'i_mon')\
+    df.write\
             .mode('overwrite')\
             .parquet(os.path.join(output_folder, 'immigration.parquet'))
     logger.info('immigration.parquet written')
+    #.partitionBy('i_yr', 'i_mon')
 
 def create_immigration_table(spark, input_folder, output_folder):
 
-    # TODO get the latest month from the parquet file and get only the updated files
-    # from the staging parquet
     df = read_immigration(spark, input_folder)
     df = add_duration_column(df)
     df = remove_colums(df)
     write_immigration(spark, df, output_folder)
-
-
-
-
 
 def main(input_folder, output_folder, sthree):
 
@@ -125,8 +121,6 @@ def main(input_folder, output_folder, sthree):
         config = configparser.ConfigParser()
         config.read('dl.cfg')
 
-        #os.environ['AWS_ACCESS_KEY_ID'] = config['AWS']['AWS_ACCESS_KEY_ID']
-        #os.environ['AWS_SECRET_ACCESS_KEY'] = config['AWS']['AWS_SECRET_ACCESS_KEY']
         aws_key = config.get('AWS', 'AWS_ACCESS_KEY_ID')
         aws_secret_key = config.get('AWS', 'AWS_SECRET_ACCESS_KEY')
         spark = create_sthree_spark_session(aws_key, aws_secret_key)

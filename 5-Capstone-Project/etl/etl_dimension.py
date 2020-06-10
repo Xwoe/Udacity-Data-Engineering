@@ -58,7 +58,6 @@ def generate_country_table(spark, input_folder, output_folder):
     cntyl = utils.spark_read_csv(spark, input_folder, 'cntyl.csv', sep=',', quotechar='"')
     cntyl.write.parquet(os.path.join(output_folder, 'country.parquet'), 'overwrite')
     logger.info('country.parquet written')
-    return cntyl
 
 def generate_full_time_table(spark, output_folder):
     """
@@ -78,10 +77,10 @@ def generate_full_time_table(spark, output_folder):
                     F.dayofmonth('dt_date').alias('day'),
                     F.dayofweek('dt_date').alias('weekday'))
 
-    timeframe.write.partitionBy('year', 'month').parquet(os.path.join(output_folder, 'dates.parquet'), 'overwrite')
+    timeframe.write\
+        .parquet(os.path.join(output_folder, 'dates.parquet'), 'overwrite')
+    #.partitionBy('year', 'month')\
     logger.info('dates.parquet written')
-    return timeframe
-
 
 def generate_temperature_country(spark, input_folder, output_folder):
 
@@ -90,27 +89,57 @@ def generate_temperature_country(spark, input_folder, output_folder):
     climate = climate.withColumn('dt', F.to_date(F.col('dt')))
     country = spark.read.option("mergeSchema", "true").parquet(os.path.join(output_folder, 'country.parquet'))
     climate = climate.join(country, on=country['cntyl'] == climate['Country'], how='leftouter')
-    climate = climate.drop('i94cntyl')
+    climate = climate.drop('cntyl')
     climate = utils.rename_columns(climate)
     climate = climate.withColumn('year', F.year('dt').alias('year'))
-    #withColumnRenamed('id', 'country_id').
-    climate = climate.\
-        withColumnRenamed('averagetemperatureuncertainty', 'avg_uncertainty').\
-        withColumnRenamed('averagetemperature', 'avg_temperature')
-    climate.write.partitionBy('year', 'country').parquet(os.path.join(
-        output_folder, 'temperature_country.parquet'), 'overwrite')
+
+    double_cols = ['average_temperature_uncertainty', 'average_temperature']
+    climate = utils.round_columns(climate, double_cols, 3)
+
+    climate.write\
+        .parquet(os.path.join(
+            output_folder, 'temperature_country.parquet'), 'overwrite')
+    #.partitionBy('year', 'country')\
     logger.info('temperature_country.parquet written')
-    return climate
 
 def generate_annual_temp_table(spark, output_folder):
     logger.info('Creating temperature_annual_country')
     annual = spark.read.option("mergeSchema", "true").parquet(os.path.join(output_folder, 'temperature_country.parquet'))
-    annual.groupby([F.col('country'), F.col('cntyl_id'), F.col('year')]).\
-        agg(F.avg('avg_temperature').alias('avg_temperature'))
-    annual.write.partitionBy('country').parquet(os.path.join(output_folder, 'temperature_annual_country.parquet'), 'overwrite')
-    logger.info('temperature_annual_country written')
-    return annual
+    annual = annual.groupby([F.col('country'), F.col('cntyl_id'), F.col('year')]).\
+        agg(F.avg('average_temperature').alias('average_temperature'))
+    double_cols = ['average_temperature']
+    annual = utils.round_columns(annual, double_cols, 3)
+    annual.write\
+        .parquet(os.path.join(output_folder, 'temperature_annual_country.parquet'), 'overwrite')
+    #.partitionBy('country')\
+    logger.info('temperature_annual_country.parquet written')
 
+
+def generate_global_temp_table(spark, input_folder, output_folder):
+    logger.info('Creating temperature_global')
+    climate = utils.spark_read_csv(spark, input_folder, 'GlobalTemperatures.csv', sep=',')
+    climate = utils.rename_columns(climate)
+    climate = climate.withColumn('year', F.year('dt').alias('year'))
+    double_cols = ['land_average_temperature',
+        'land_average_temperature_uncertainty',
+        'land_max_temperature',
+        'land_max_temperature_uncertainty',
+        'land_min_temperature',
+        'land_min_temperature_uncertainty',
+        'land_and_ocean_average_temperature',
+        'land_and_ocean_average_temperature_uncertainty']
+    agg_dict = dict(zip(double_cols, ['avg'] * len(double_cols)))
+    climate = climate.groupby([F.col('year')]).\
+        agg(agg_dict)
+    all_col_names = ['year'] + double_cols
+    climate = climate.toDF(*all_col_names)
+
+    climate = utils.round_columns(climate, double_cols, 3)
+
+    climate.write.parquet(os.path.join(
+        output_folder, 'temperature_global.parquet'), 'overwrite')
+
+    logger.info('temperature_global.parquet written')
 
 def generate_demographic_table(spark, input_folder, output_folder):
     logger.info('creating city_demographics')
@@ -132,10 +161,19 @@ def generate_demographic_table(spark, input_folder, output_folder):
 
     # reformat column names
     df_demo = utils.rename_columns(df_demo)
-    df_demo.write.partitionBy('state').parquet(os.path.join(output_folder, 'city_demographics.parquet'), 'overwrite')
-    logger.info('city_demographics written')
-    return df_demo
 
+    # Reduce columns and remove duplicates, since there is one entry for each race.
+    # Race and count are the columns for each race's count.
+    keep_columns = ['prtl_city_id', 'city', 'median_age', 'male_population', 'female_population',
+                    'total_population', 'foreignborn', 'average_household_size', 'state_code',
+                    'state']
+    df_demo = df_demo.select(keep_columns)
+    df_demo = df_demo.dropDuplicates()
+
+    df_demo.write\
+        .parquet(os.path.join(output_folder, 'city_demographics.parquet'), 'overwrite')
+    #.partitionBy('state')\
+    logger.info('city_demographics written')
 
 def main(input_folder, output_folder, sthree):
 
@@ -143,9 +181,6 @@ def main(input_folder, output_folder, sthree):
     if sthree:
         config = configparser.ConfigParser()
         config.read('dl.cfg')
-
-        #os.environ['AWS_ACCESS_KEY_ID'] = config['AWS']['AWS_ACCESS_KEY_ID']
-        #os.environ['AWS_SECRET_ACCESS_KEY'] = config['AWS']['AWS_SECRET_ACCESS_KEY']
         aws_key = config.get('AWS', 'AWS_ACCESS_KEY_ID')
         aws_secret_key = config.get('AWS', 'AWS_SECRET_ACCESS_KEY')
         spark = create_sthree_spark_session(aws_key, aws_secret_key)
@@ -177,12 +212,17 @@ def main(input_folder, output_folder, sthree):
     # city demographics
     generate_demographic_table(spark, csv_folder, output_folder)
 
+    ## TEMPERATURES
+
     # global temperatures
-    utils.csv_to_parquet(spark, temperature_folder, output_folder, 'GlobalTemperatures', 'temperature_global')
+    #utils.csv_to_parquet(spark, temperature_folder, output_folder, 'GlobalTemperatures', 'temperature_global')
+    generate_global_temp_table(spark, temperature_folder, output_folder)
     # country temperatures
     generate_temperature_country(spark, temperature_folder, output_folder)
     #utils.csv_to_parquet(spark, temperature_folder, output_folder, 'GlobalLandTemperaturesByCountry', 'temperature_country')
+
     generate_annual_temp_table(spark, output_folder)
+
 
 
 if __name__ == "__main__":
