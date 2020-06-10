@@ -1,10 +1,56 @@
-from functools import reduce
-from itertools import chain
-from pyspark.sql.functions import udf
-import pyspark.sql.functions as F
-import pyspark.sql.types as T
 import os
 import re
+from functools import reduce
+from itertools import chain
+
+import pyspark.sql.functions as F
+import pyspark.sql.types as T
+
+from pyspark.sql import SparkSession
+from pyspark.sql.functions import udf
+
+from log import get_logger
+logger = get_logger(__name__)
+
+def create_spark_session():
+
+    """
+    Create a new Spark session and return it.
+    This function shall be used if either the script is being run on a local machine
+    accessing local data sources or if it is being run within an EMR instance.
+    """
+    spark = SparkSession.builder \
+        .config("spark.jars.packages", "org.apache.hadoop:hadoop-aws:2.7.5") \
+        .getOrCreate()
+
+    logger.info('using local data store')
+
+    return spark
+
+def create_sthree_spark_session(aws_key, aws_secret_key):
+    """
+    Create a new Spark session and return it.
+    This function shall be used if the script accesses a remote S3 instance and
+    credentials are required.
+    """
+    os.environ['PYSPARK_SUBMIT_ARGS'] = \
+        '--packages "org.apache.hadoop:hadoop-aws:2.7.5" pyspark-shell'
+    spark = SparkSession.builder \
+        .config("spark.jars.packages", "org.apache.hadoop:hadoop-aws:2.7.5") \
+        .getOrCreate()
+
+
+    logger.info('using S3 data store')
+    spark.sparkContext._jsc.hadoopConfiguration().set("fs.s3a.impl",
+                                                    "org.apache.hadoop.fs.s3a.S3AFileSystem")
+    spark.sparkContext._jsc.hadoopConfiguration().set("fs.s3a.access.key", aws_key)
+    spark.sparkContext._jsc.hadoopConfiguration().set("fs.s3a.secret.key", aws_secret_key)
+    spark.sparkContext._jsc.hadoopConfiguration().set("fs.s3a.endpoint", "s3.amazonaws.com")
+    spark.sparkContext._jsc.hadoopConfiguration().set("fs.s3a.connection.timeout", "100")
+    spark.sparkContext._jsc.hadoopConfiguration().set("fs.s3a.connection.maximum", "5000")
+    spark.sparkContext._jsc.hadoopConfiguration().set("fs.s3a.buffer.dir", "/root/spark/work,/tmp")
+
+    return spark
 
 def process_time(df_time):
     df_time = df_time.withColumn("arrival_date", F.expr("date_add(to_date('1960-01-01'), arrdate)"))
