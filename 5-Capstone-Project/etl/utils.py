@@ -13,7 +13,6 @@ from log import get_logger
 logger = get_logger(__name__)
 
 def create_spark_session():
-
     """
     Create a new Spark session and return it.
     This function shall be used if either the script is being run on a local machine
@@ -52,37 +51,25 @@ def create_sthree_spark_session(aws_key, aws_secret_key):
 
     return spark
 
-def process_time(df_time):
-    df_time = df_time.withColumn("arrival_date", F.expr("date_add(to_date('1960-01-01'), arrdate)"))
-    df_time = df_time.withColumn("depart_date", F.expr("date_add(to_date('1960-01-01'), depdate)"))
-    return df_time.withColumn("diff_days", F.datediff("depart_date", "arrival_date")).show()
-
-
-def format_allcaps(st):
-    """
-    Run `capitalize()' on each word in a string separated by blanks.
-    """
-    spl = st.split(' ')
-    spl = [s.capitalize() for s in spl]
-    return ' '.join(spl)
-
 
 def map_col(spark, df, datafolder, map_col_name, df_col_name, new_col_name):
     """
-
+    Map the mapping of a simple csv file with key-value structure to a new column in the dataframe
+    matching the keys.
 
     Parameters
     ----------
+    spark: SparkSession
     df : spark dataframe
         The file containing the df_col_name to be used for mapping.
+    datafolder : str
+        Folder location of the csv file to be used for mapping.
     map_col_name : str
         The column name of the mapping file.
     df_col_name : str
         The column name in the Spark dataframe to be used.
     new_col_name : str
         New column name of the mapping results.
-
-
     """
     df_map = spark_read_csv(spark, datafolder, f'{map_col_name}.csv')
     df_map = df_map.toPandas()
@@ -90,14 +77,6 @@ def map_col(spark, df, datafolder, map_col_name, df_col_name, new_col_name):
     dic_map = dict(zip(df_map[id_col], df_map[map_col_name]))
     mapping_expr = F.create_map([F.lit(x) for x in chain(*dic_map.items())])
     return df.withColumn(new_col_name, mapping_expr[F.col(df_col_name)])
-
-
-@udf
-def udf_city_name(city_full):
-    """
-    Format the values for city names to be properly capitalized word by word.
-    """
-    return str.split(city_full, ',')[0].capitalize()
 
 def camel_to_snake(s):
     """
@@ -107,7 +86,9 @@ def camel_to_snake(s):
 
 
 def format_column_names(s):
-    #s = s.casefold()
+    """
+    Format the column names to be proper names, which can also be used in a SQL table.
+    """
     s = s.replace(' ', '')
     s = s.replace('-', '')
     s = s.replace('i94', 'i_')
@@ -115,6 +96,14 @@ def format_column_names(s):
     return s
 
 def rename_columns(df):
+    """
+    Rename columns in dataframe to match SQL standards.
+
+    Parameters
+    ----------
+    df : spark dataframe
+        The file containing the df_col_name to be used for mapping.
+    """
     old_names = df.schema.names
     new_names = [format_column_names(s) for s in old_names]
     df = reduce(lambda df, idx:
@@ -124,6 +113,15 @@ def rename_columns(df):
 def round_columns(df, columns, num_decimals):
     """
     Round columns to the specified number of decimal places.
+
+    Parameters
+    ----------
+    df : spark dataframe
+        The file containing the df_col_name to be used for mapping.
+    columns : [str]
+        List of columns, on which the mapping should be applied.
+    num_decimals : int
+        Number of decimals to use for rounding.
     """
     for col in columns:
         df = df.withColumn(col, F.round(df[col], num_decimals))
@@ -131,12 +129,35 @@ def round_columns(df, columns, num_decimals):
 
 
 def spark_read_csv(spark, folder, filename, **kwargs):
+    """
+    Round columns to the specified number of decimal places.
 
+    Parameters
+    ----------
+    spark: SparkSession
+    folder : str
+        Input folder name.
+    filename : str
+    """
     return spark.read.format('csv').options(header='true', inferSchema=True, **kwargs).\
         load(os.path.join(folder, filename))
 
 def csv_to_parquet(spark, datafolder, outputfolder, csv_name, table_name):
+    """
+    Read contents of a csv files and write them to a parquet file.
+
+    Parameters
+    ----------
+    spark : SparkSession
+    datafolder : str
+        Input folder for csv file.
+    outputfolder : str
+        Output folder for parquet file.
+    csv_name : str
+        Name of csv file without the .csv ending.
+    table_name : str
+        Name of the output parquet file.
+    """
     df = spark_read_csv(spark, datafolder, f'{csv_name}.csv', sep=',', quotechar=['"'])
-    #df = df.withColumnRenamed('value', 'id')
     df.write.parquet(os.path.join(outputfolder, f'{table_name}.parquet'), 'overwrite')
     return df
