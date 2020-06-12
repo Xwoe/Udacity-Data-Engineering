@@ -8,9 +8,9 @@ Sustainify is an organization, which wants to communicate different aspects of s
 
 On the sustainability track they want to create a dashboard for users, which makes it possible for them to explore different aspects of harm our daily habits impose on our planet. One important aspect is traveling. To start out they were kindly provided by Udacity with datasets on inbound visitors to the US, worldwide temperature data and demographic data of US cities.
 
-On the commercial track they want to offer analyses around how and why people travel. What destinations do they choose, where do the most visitors come from and do they choose a certain time of year, maybe due to the wheather in their countries of origin?
+On the commercial track they want to offer analyses around how and why people travel. What destinations do they choose, where do the most visitors come from and do they choose a certain time of year, maybe due to the weather in their countries of origin?
 
-The type of analyses, which can be done by combining these datasets are first mainly based around the question why and how people travel. One interesting query might be: how many very short business trips are there to the US and how much CO2 could be avoided if they where held via Web-Meetings instead of doing them in person. Other interesting analyses might be whether the travel volume has increased over the years and whether the travel destinations have shifted.
+The type of analyses, which can be done by combining these datasets are first mainly based around the question why and how people travel. One interesting query might be: how many very short business trips are there to the US and how much CO2 could be avoided if they where held via Web-Meetings instead of doing them in person? Other interesting analyses might be whether the travel volume has increased over the years and whether the travel destinations have shifted.
 
 It is planned to add more datasets for the analyses later on. A little outlook for this is given at the end of this document.
 
@@ -23,51 +23,42 @@ The datasets provided by Udacity where:
 - `us-cities-demographics.csv`: Information on the demographics of various US cities
 - `airport-codes_csv.csv`: Airport Code mappings
 
-The Airport Codes dataset was not used, since the information about the airports was not important in our case and data on the port cities could be obtained otherwise.
+The Airport Codes dataset was not used, since the information about the airports was not important in our case and data on the port cities could be obtained by linking it to the City Demographics data.
 
+### I94 Immigration Dataset
 
-The dataset which contains the facts is the immigration dataset. It contains one entry for each visitor to the US. In this dataset only legally admitting visitors are contained, no applications for permanent stay.
+The dataset which contains the facts is the immigration dataset. It contains one entry for each visitor to the US. In this dataset only legally admitting visitors are contained, no applications for permanent stay or asylum.
 The dataset contains data about the date and mode of transport of the visitor as well as the purpose of their stay and their age. Also it contains information about the length of the stay (in case the `depdate` column is not null).
-
-Columns, which where not used where the following:
- cicid| i94yr|i94mon|i94cit|i94res|i94port|arrdate|i94mode|i94addr|depdate|i94bir|i94visa|count|dtadfile|visapost|occup|entdepa|entdepd|entdepu|matflag|biryear| dtaddto|gender|insnum|airline|         admnum|fltno|visatype|
-
-
- |-- cicid: integer (nullable = true)
- |-- i_yr: integer (nullable = true)
- |-- i_mon: integer (nullable = true)
- |-- arrdate: integer (nullable = true)
- |-- depdate: integer (nullable = true)
- |-- i_cit: integer (nullable = true)
- |-- i_res: integer (nullable = true)
- |-- i_port: string (nullable = true)
- |-- i_mode: integer (nullable = true)
- |-- i_addr: string (nullable = true)
- |-- i_bir: integer (nullable = true)
- |-- i_visa: integer (nullable = true)
- |-- visatype: string (nullable = true)
- |-- gender: string (nullable = true)
- |-- airline: string (nullable = true)
- |-- fltno: string (nullable = true)
- |-- length_stay: integer (nullable = true)
 
 In order to obtain information about the columns `i94cit`, `i94res`, `i94port`, `i94mode` and `i94addr` the necessary metadata was extracted from the metadata file. The data was manually extracted and written to csv files. In case of the `i94port` column the mapped data contained the city and short sign of the state, separated by a comma. This data was split in two csv files to allow for easier mapping. The splitting was done by the comma that was contained and then the city name was properly capitalized so that it could later be mapped to match with the data in the city demographics dataset. All csv files contain a key value format, which allows for easy mapping and efficient reuse of code.
 
 
+Columns, which where not used where the following, because they either provided no value to the analyses or they where mostly null anyway:
+- `insnum`
+- `dtaddto`
+- `matflag`
+- `entdepu`
+- `entdepa`
+- `entdepd`
+- `admnum`
+- `dtadfile`
+- `occup`
+- `biryear`
 
 
+Some columns do not provide information for analyses yet, but they will offer a link to other datasets that will be linked in the future. Thes columns are for example: `airline`, `fltno`. These columns can later be linked to a dataset for average flight fares to conduct analyses on the effect prices have on the total travel volumne.
 
 
+### Temperature Datasets
 
-Step 2: Explore and Assess the Data
-Explore the Data
-Identify data quality issues, like missing values, duplicate data, etc.
+There are temperature datasets provided in different geographical granularity. They are aggregated monthly average temperatures divided either by state, major city, city, country or globally. The global temperature dataset also contains temperatures separated by land and ocean. All datasets also contain a statistical uncertainty for the temperature values, which might also be important for the analysts.
 
-Describe the data sets you're using. Where did it come from? What type of information is included?
+For the first iteration of Sustainify it was decided to only take the global and country datasets and average them by year. This should already provide insights for the global climate change trends by country. Later on after checking back with the analysts, more fine granular aggregations might be added.
 
 
-Explain what you plan to do in the project in more detail. What data do you use? What is your end solution look like? What tools did you use? etc>
+### US Cities Demographics
 
+This dataset contains demographic data for US cities. It contains numbers of the population divided by race, gender and total numbers. For the race counts one row exists for each race. The race is not important for our analyses and thus the columns were removed and the separated rows where unified. The other columns where kept, inluding the `Foreign-born` column which might be interersting to see for analysis regarding climate change based asylum.
 
 
 ## Architecture
@@ -78,10 +69,15 @@ The choice for Redshift was made since it makes it easier to open up the data fo
 
 ## Data Model Design
 
-For the data model a star schema was selected with one fact table and multiple dimension tables detailing different static data of the tables like mapping ids to their text description for example. The only tables, which are not strictly dimension tables are the temperature tables, which also contain facts linked to the countries.
+For the data model a star schema was selected with one fact table and multiple dimension tables detailing different static data of the tables like mapping ids to their text description for example. The only tables, which are not strictly dimension tables are the temperature tables, which also contain facts linked to the countries. A more detailed description of all the columns is provided in the [data dictionary](./documentation/DataDictionary.pdf)
+
+The star schema can be seen in this ERM:
+
+![Sustainify ERM](images/ERM.png?raw=true "ERM")
+
+The immigration table is the fact table, which should be updated monthly in the future. It contains links to the dimension tables. The tables `transport`, `visa` and `country` are just lookup tables for the identifiers, which are stored in the fact table. The `city_demographics` table is linked via the `prtl_city_id` and contains information on the airport cities. The `dates` table links the i94 date codes to the actual date as well as day, weekday and zear
 
 The temperature data for countries was being averaged by year, so that it is easy for analysts to make an assumption, which countries have been especially affected by climate change by comparing it to the global trend in temperature rise.
-
 
 
 ## ETL processes Overview

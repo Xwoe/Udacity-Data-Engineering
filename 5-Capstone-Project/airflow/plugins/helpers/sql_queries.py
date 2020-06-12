@@ -70,6 +70,7 @@ class SqlQueries:
           land_min_temperature_uncertainty float,
           land_and_ocean_average_temperature float,
           land_and_ocean_average_temperature_uncertainty float
+          CONSTRAINT temperature_global_pkey PRIMARY KEY ("year")
         );
     """)
 

@@ -34,14 +34,6 @@ create_sql_tables = PostgresOperator(
     postgres_conn_id='redshift',
 )
 
-drop_sql_tables = PostgresOperator(
-    task_id='Drop_Tables',
-    dag=dag,
-    sql=SqlQueries.drop_tables,
-    postgres_conn_id='redshift',
-)
-
-
 transport_to_redshift = StageToRedshiftOperator(
     task_id='Transport_to_Redshift',
     dag=dag,
@@ -186,8 +178,7 @@ quality_temperature_global = DataQualityOperator(
 end_operator = DummyOperator(task_id='Stop_Execution',  dag=dag)
 
 
-start_operator >> drop_sql_tables
-drop_sql_tables >> create_sql_tables
+start_operator >> create_sql_tables
 
 create_sql_tables >> [transport_to_redshift,
                       country_to_redshift,
