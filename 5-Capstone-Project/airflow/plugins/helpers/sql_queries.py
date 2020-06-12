@@ -13,8 +13,8 @@ class SqlQueries:
     create_tables = ("""
         CREATE TABLE IF NOT EXISTS public.transport (
             model_id int4 NOT NULL,
-            "model" varchar(20))
-            CONSTRAINT model_pkey PRIMARY KEY (model_id);
+            "model" varchar(20),
+            CONSTRAINT model_pkey PRIMARY KEY (model_id));
 
         CREATE TABLE IF NOT EXISTS public.dates (
           i_date int,
@@ -32,13 +32,14 @@ class SqlQueries:
           CONSTRAINT country_pkey PRIMARY KEY (cntyl_id)
         );
 
+
         CREATE TABLE IF NOT EXISTS public.temperature_annual_country (
           cntyl_id int,
           "year" int4,
 		      average_temperature double precision,
-		      country varchar(max)
+		      country varchar(max),
+          FOREIGN KEY (cntyl_id) REFERENCES public.country (cntyl_id)
         );
-
 
         CREATE TABLE IF NOT EXISTS public.city_demographics (
           prtl_city_id varchar(5),
@@ -69,7 +70,7 @@ class SqlQueries:
           land_min_temperature float,
           land_min_temperature_uncertainty float,
           land_and_ocean_average_temperature float,
-          land_and_ocean_average_temperature_uncertainty float
+          land_and_ocean_average_temperature_uncertainty float,
           CONSTRAINT temperature_global_pkey PRIMARY KEY ("year")
         );
     """)
@@ -97,7 +98,14 @@ class SqlQueries:
           airline varchar(4),
           fltno varchar(6),
           length_stay int,
-          CONSTRAINT {table_name}_pkey PRIMARY KEY (cicid)
+          CONSTRAINT {table_name}_pkey PRIMARY KEY (cicid),
+          FOREIGN KEY (arrdate) REFERENCES public.dates (i_date),
+          FOREIGN KEY (depdate) REFERENCES public.dates (i_date),
+          FOREIGN KEY (i_cit) REFERENCES public.country (cntyl_id),
+          FOREIGN KEY (i_res) REFERENCES public.country (cntyl_id),
+          FOREIGN KEY (i_mode) REFERENCES public.transport (model_id),
+          FOREIGN KEY (i_visa) REFERENCES public.visa (visa_id),
+          FOREIGN KEY (i_port) REFERENCES public.visa (prtl_city_id)
         );
     """)
 

@@ -69,9 +69,9 @@ The choice for Redshift was made since it makes it easier to open up the data fo
 
 ## Data Model Design
 
-For the data model a star schema was selected with one fact table and multiple dimension tables detailing different static data of the tables like mapping ids to their text description for example. The only tables, which are not strictly dimension tables are the temperature tables, which also contain facts linked to the countries. A more detailed description of all the columns is provided in the [data dictionary](./documentation/DataDictionary.pdf)
+For the data model a snowflake schema was selected with one fact table and multiple dimension tables detailing different static data of the tables like mapping ids to their text description for example. The only tables, which are not strictly dimension tables are the temperature tables, which also contain facts linked to the countries. A more detailed description of all the columns is provided in the [data dictionary](./documentation/DataDictionary.pdf)
 
-The star schema can be seen in this ERM:
+The snowflake schema can be seen in this ERM:
 
 ![Sustainify ERM](images/ERM.png?raw=true "ERM")
 
