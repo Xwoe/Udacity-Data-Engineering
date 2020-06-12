@@ -22,7 +22,7 @@ default_args = {
 dag = DAG('sustainify_dimensions_dag',
           default_args=default_args,
           description='Load and transform data in Redshift with Airflow',
-          schedule_interval='@monthly'
+          schedule_interval='@once'
         )
 
 start_operator = DummyOperator(task_id='Begin_Execution',  dag=dag)
