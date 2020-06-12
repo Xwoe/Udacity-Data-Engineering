@@ -33,7 +33,7 @@ quality_transport = DataQualityOperator(
     dag=dag,
     redshift_conn_id='redshift',
     sql_query='SELECT COUNT(*) FROM public.transport',
-    check_not_empty=True    
+    check_not_empty=True
 )
 
 quality_dates = DataQualityOperator(
@@ -41,7 +41,7 @@ quality_dates = DataQualityOperator(
     dag=dag,
     redshift_conn_id='redshift',
     sql_query='SELECT COUNT(*) FROM public.dates',
-    check_not_empty=True    
+    check_not_empty=True
 )
 
 quality_country = DataQualityOperator(
@@ -49,7 +49,7 @@ quality_country = DataQualityOperator(
     dag=dag,
     redshift_conn_id='redshift',
     sql_query='SELECT COUNT(*) FROM public.country',
-    check_not_empty=True    
+    check_not_empty=True
 )
 
 quality_temperature_annual_country = DataQualityOperator(
@@ -57,7 +57,7 @@ quality_temperature_annual_country = DataQualityOperator(
     dag=dag,
     redshift_conn_id='redshift',
     sql_query='SELECT COUNT(*) FROM public.temperature_annual_country',
-    check_not_empty=True    
+    check_not_empty=True
 )
 
 quality_city_demographics = DataQualityOperator(
@@ -65,7 +65,7 @@ quality_city_demographics = DataQualityOperator(
     dag=dag,
     redshift_conn_id='redshift',
     sql_query='SELECT COUNT(*) FROM public.city_demographics',
-    check_not_empty=True    
+    check_not_empty=True
 )
 
 quality_visa = DataQualityOperator(
@@ -83,22 +83,6 @@ quality_temperature_global = DataQualityOperator(
     sql_query='SELECT COUNT(*) FROM public.temperature_global',
     check_not_empty=True
 )
-
-
-
-
-"""
-load_songplays_table = LoadFactOperator(
-    task_id='Load_songplays_fact_table',
-    dag=dag,
-    redshift_conn_id='redshift',
-    select_sql=SqlQueries.songplay_table_insert,
-    table='public.songplays'
-)
-"""
-
-
-
 
 
 end_operator = DummyOperator(task_id='Stop_Execution',  dag=dag)
