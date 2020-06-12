@@ -13,7 +13,8 @@ class SqlQueries:
     create_tables = ("""
         CREATE TABLE IF NOT EXISTS public.transport (
             model_id int4 NOT NULL,
-            "model" varchar(20));
+            "model" varchar(20))
+            CONSTRAINT model_pkey PRIMARY KEY (model_id);
 
         CREATE TABLE IF NOT EXISTS public.dates (
           i_date int,
@@ -49,7 +50,8 @@ class SqlQueries:
  		      foreignborn int,
 		      average_household_size float,
 		      state_code varchar(3),
-		      state varchar(max)
+		      state varchar(max),
+          CONSTRAINT city_demographics_pkey PRIMARY KEY (prtl_city_id)
         );
 
         CREATE TABLE IF NOT EXISTS public.visa (
